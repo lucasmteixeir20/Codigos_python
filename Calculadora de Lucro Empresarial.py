@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 # Configuração da página
 st.set_page_config(
@@ -117,13 +118,23 @@ with col2:
             'Valor': [imposto, custo, lucro]
         })
 
-        fig = px.pie(
-            dados_grafico,
-            values='Valor',
-            names='Componente',
+        # Criando o gráfico com plotly.graph_objects para mais controle
+        fig = go.Figure(data=[go.Pie(
+            labels=dados_grafico['Componente'],
+            values=dados_grafico['Valor'],
+            hole=0.3,
+            marker=dict(colors=['#ef5350', '#42a5f5', '#66bb6a'])
+        )])
+
+        fig.update_layout(
             title='Composição do Faturamento',
-            color_discrete_sequence=['#ef5350', '#42a5f5', '#66bb6a']
+            showlegend=True,
+            width=600,
+            height=400,
+            margin=dict(t=50, l=0, r=0, b=0)
         )
+
+        # Exibindo o gráfico
         st.plotly_chart(fig, use_container_width=True)
 
 # Adicionar informações extras
