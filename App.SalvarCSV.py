@@ -78,11 +78,16 @@ def processar_dados():
     # Verificar se o diretório existe, caso contrário, criar
     if not os.path.exists(caminho):
         os.makedirs(caminho)
-
+    
+    # Caminho completo para salvar o arquivo
     Caminho_completo = os.path.join(caminho, Nome_arquivo)
+
+    # Debug: Exibir caminho completo
+    st.write(f"Caminho completo para salvar o arquivo: {Caminho_completo}")
     
     # Salvar arquivo CSV
     df_colunas_template.to_csv(Caminho_completo, index=False)
+    
     return Caminho_completo
 
 # Layout da interface com Streamlit
