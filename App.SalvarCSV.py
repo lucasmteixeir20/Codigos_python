@@ -42,4 +42,59 @@ def processar_dados():
     df['Codigo de Barras'] = ''
 
     # Adicionando as colunas ausentes com valores vazios
-    df['Grupo de imposto retido no item
+    df['Grupo de imposto retido no item'] = ''  # Corrigido
+    df['Grupo de imposto'] = ''
+
+    # Criar as colunas que faltam, com valores vazios
+    df['Dimensao_Produto'] = ''
+    df['Dimensao_correspondente'] = ''
+    df['Dimensao_ponto'] = ''
+    df['Dimensao_departamento'] = ''
+    df['Dimensao_Estabelecimeto_fiscal_1'] = df['Dimensao_Estabelecimeto_fiscal']
+    df['Dimensao_produto_1'] = df['Dimensao_Produto']
+    df['Dimensao_correspondente.1'] = df['Dimensao_correspondente']
+    df['Dimensao_1'] = df['Dimensao_ponto']
+    df['Ponto'] = '00000003'
+
+    # Formatando as datas
+    df['Data_transacao'] = df['Data_transacao'].dt.strftime('%d/%m/%y')
+    df['Data_Vencimento'] = df['Data_Vencimento'].dt.strftime('%d/%m/%y')
+    df['Data_Documento'] = df['Data_Documento'].dt.strftime('%d/%m/%y')
+
+    # Selecione as colunas necessárias
+    df_colunas_template = df[['Empresa', 'BRL', 'Taxa_Cambio', 'Data_transacao', 'Tipo_de_Conta',
+                              'Conta', 'Dimensao_Estabelecimeto_fiscal', 'Dimensao_Produto', 'Dimensao_correspondente', 
+                              'Dimensao_ponto', 'Dimensao_departamento', 'Descricao', 'Crédito', 'Débito', 
+                              'Tipo de Contrapartida', 'Conta Partida', 'Dimensao_Estabelecimeto_fiscal_1', 
+                              'Dimensao_produto_1', 'Dimensao_correspondente.1', 'Dimensao_1', 'Ponto', 'Fatura', 
+                              'Data_Vencimento', 'Data_Documento', 'Numero_documento', 'Grupo de imposto Retido na fonte', 
+                              'Grupo de imposto retido no item', 'Perfil de lançamento', 'Codigo Imposto', 
+                              'Grupo de imposto', 'Codigo de Barras']]
+
+    # Definir o nome do arquivo com data
+    Nome_arquivo = 'Template_RESQ' + ' - ' + datetime.today().strftime('%d-%m-%y') + '.csv'
+    caminho = 'C:/Users/lucas/Desktop/Teste_template'
+    
+    # Garantir a criação do diretório (caso não exista)
+    os.makedirs(caminho, exist_ok=True)
+
+    # Caminho completo para salvar o arquivo
+    Caminho_completo = os.path.join(caminho, Nome_arquivo)
+
+    try:
+        # Salvar arquivo CSV
+        df_colunas_template.to_csv(Caminho_completo, index=False)
+        st.success(f"Arquivo salvo com sucesso em: {Caminho_completo}")
+    except Exception as e:
+        st.error(f"Ocorreu um erro ao salvar o arquivo: {str(e)}")
+    
+    return Caminho_completo
+
+# Layout da interface com Streamlit
+st.title("Processador de Dados - Template RESQ")
+st.write("Clique no botão abaixo para processar os dados e gerar o arquivo CSV.")
+
+# Botão para processar os dados
+if st.button('Processar Dados'):
+    caminho_arquivo = processar_dados()
+    st.download_button(label="Baixar o arquivo", data=open(caminho_arquivo, 'rb'), file_name=os.path.basename(caminho_arquivo), mime='text/csv')
