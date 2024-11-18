@@ -6,12 +6,14 @@ import os
 
 # Função para processar os dados
 def processar_dados():
+    # Dicionário com os dados
     dicionario = {
         'CPF': ['023.875.320-40', '234.768.560-60', '300.800.800-90', '600.900.300-50'],
         'FORNECEDOR': ['000230', '000340', '000900', '048589'],
         'VALOR': ['500', '1000', '600', '500'],
         'CENTRO_CUSTO': ['34050', '1061', '6041', '56040']}
 
+    # Criar DataFrame
     df = pd.DataFrame(dicionario)
 
     # Processamento do DataFrame
@@ -72,6 +74,11 @@ def processar_dados():
     # Definir o nome do arquivo com data
     Nome_arquivo = 'Template_RESQ' + ' - ' + datetime.today().strftime('%d-%m-%y') + '.csv'
     caminho = 'C:/Users/lucas/Desktop/Teste_template'
+    
+    # Verificar se o diretório existe, caso contrário, criar
+    if not os.path.exists(caminho):
+        os.makedirs(caminho)
+
     Caminho_completo = os.path.join(caminho, Nome_arquivo)
     
     # Salvar arquivo CSV
