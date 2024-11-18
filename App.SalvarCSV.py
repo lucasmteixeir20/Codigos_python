@@ -78,15 +78,16 @@ def processar_dados():
     # Verificar se o diretório existe, caso contrário, criar
     if not os.path.exists(caminho):
         os.makedirs(caminho)
-    
+
     # Caminho completo para salvar o arquivo
     Caminho_completo = os.path.join(caminho, Nome_arquivo)
 
-    # Debug: Exibir caminho completo
-    st.write(f"Caminho completo para salvar o arquivo: {Caminho_completo}")
-    
-    # Salvar arquivo CSV
-    df_colunas_template.to_csv(Caminho_completo, index=False)
+    try:
+        # Salvar arquivo CSV
+        df_colunas_template.to_csv(Caminho_completo, index=False)
+        st.success(f"Arquivo salvo com sucesso em: {Caminho_completo}")
+    except Exception as e:
+        st.error(f"Ocorreu um erro ao salvar o arquivo: {str(e)}")
     
     return Caminho_completo
 
@@ -97,5 +98,4 @@ st.write("Clique no botão abaixo para processar os dados e gerar o arquivo CSV.
 # Botão para processar os dados
 if st.button('Processar Dados'):
     caminho_arquivo = processar_dados()
-    st.success(f"Arquivo salvo com sucesso em: {caminho_arquivo}")
     st.download_button(label="Baixar o arquivo", data=open(caminho_arquivo, 'rb'), file_name=os.path.basename(caminho_arquivo), mime='text/csv')
